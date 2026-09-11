@@ -70,6 +70,14 @@ public class GlobalExceptionHandler {
                 .body(new ErrorResponse("VALIDATION_ERROR", details, correlationId));
     }
 
+    @ExceptionHandler(org.springframework.http.converter.HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorResponse> handleMessageNotReadable(org.springframework.http.converter.HttpMessageNotReadableException ex) {
+        String correlationId = MDC.get(RequestLoggingFilter.MDC_CORRELATION_ID_KEY);
+        log.warn("malformed_request_body correlation_id={} error={}", correlationId, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse("INVALID_REQUEST_BODY", "Malformed request body or invalid data types (e.g. invalid UUID)", correlationId));
+    }
+
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ErrorResponse> handleNoResourceFound(NoResourceFoundException ex) {
         String correlationId = MDC.get(RequestLoggingFilter.MDC_CORRELATION_ID_KEY);
