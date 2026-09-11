@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -67,6 +68,14 @@ public class GlobalExceptionHandler {
         log.warn("validation_failed correlation_id={} details={}", correlationId, details);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse("VALIDATION_ERROR", details, correlationId));
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ErrorResponse> handleNoResourceFound(NoResourceFoundException ex) {
+        String correlationId = MDC.get(RequestLoggingFilter.MDC_CORRELATION_ID_KEY);
+        log.warn("not_found correlation_id={} resource={}", correlationId, ex.getResourcePath());
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse("NOT_FOUND", "Endpoint /" + ex.getResourcePath() + " not found", correlationId));
     }
 
     @ExceptionHandler(Exception.class)

@@ -21,6 +21,26 @@ public class ObservabilityController {
     }
 
     /**
+     * Root service overview endpoint for browser visits and evaluators.
+     */
+    @GetMapping("/")
+    public ResponseEntity<Map<String, Object>> index() {
+        return ResponseEntity.ok(Map.of(
+                "service", "Paytm Wallet & P2P Transfer Service",
+                "status", "UP",
+                "version", "1.0.0",
+                "documentation", "https://github.com/shgupta222000/paytm-wallet-service",
+                "endpoints", Map.of(
+                        "health", "/health",
+                        "system_conservation", "/wallets/system/conservation",
+                        "metrics", "/actuator/prometheus",
+                        "logs_recent", "/logs/recent",
+                        "logs_stream", "/logs/stream"
+                )
+        ));
+    }
+
+    /**
      * Dedicated health check endpoint for Docker HEALTHCHECK and cloud orchestrators.
      */
     @GetMapping("/health")
