@@ -135,7 +135,9 @@ We provide a one-command burst script that executes all live evaluation probes:
      - `SPRING_DATASOURCE_PASSWORD`: `<neon-password>`
      - `PORT`: `8080`
    - Deploy!
-3. **Verify Deployment**:
+3. **Verify Deployment (Live Endpoint)**:
+   - **Live Service URL**: [https://paytm-wallet-service.onrender.com](https://paytm-wallet-service.onrender.com)
+   - Run concurrency evaluation probes against the live deployment:
    ```bash
-   ./burst.sh https://<your-app-subdomain>.onrender.com
+   ./burst.sh https://paytm-wallet-service.onrender.com
    ```
